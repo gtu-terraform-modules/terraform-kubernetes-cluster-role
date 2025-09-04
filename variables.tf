@@ -27,8 +27,12 @@ variable "cluster_role_permissions" {
     non_resource_urls = optional(list(string), [])
     verbs             = list(string)
   }))
+
   validation {
-    condition     = alltrue([for r in var.cluster_role_permissions : length(r.resources) > 0 || length(r.non_resource_urls) > 0])
-    error_message = "Each permission must have either resources or non_resource_urls defined."
+    condition     = alltrue([
+      for r in var.cluster_role_permissions :
+      !(length(r.resources) > 0 && length(r.non_resource_urls) > 0)
+    ])
+    error_message = "Each rule in cluster_role_permissions must not have both resources and non_resource_urls defined at the same time."
   }
 }
