@@ -3,7 +3,7 @@ variable "service_account_name" {
   type        = string
 }
 
-variable "namespace" {
+variable "service_account_namespace" {
   description = "The namespace in which to create the resources"
   type        = string
   default     = "default"

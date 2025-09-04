@@ -1,7 +1,7 @@
 resource "kubernetes_service_account" "this" {
   metadata {
     name      = var.service_account_name
-    namespace = var.namespace
+    namespace = var.service_account_namespace
   }
 }
 
@@ -34,14 +34,14 @@ resource "kubernetes_cluster_role_binding" "this" {
   subject {
     kind      = "ServiceAccount"
     name      = kubernetes_service_account.this.metadata[0].name
-    namespace = var.namespace
+    namespace = var.service_account_namespace
   }
 }
 
 resource "kubernetes_secret_v1" "this" {
   metadata {
     name      = "${kubernetes_service_account.this.metadata[0].name}-token"
-    namespace = var.namespace
+    namespace = var.service_account_namespace
     annotations = {
       "kubernetes.io/service-account.name" = kubernetes_service_account.this.metadata[0].name
     }
