@@ -7,11 +7,6 @@ variable "service_account_namespace" {
   description = "The namespace in which to create the resources"
   type        = string
   default     = "default"
-
-  validation {
-    condition     = length(var.namespace) > 0
-    error_message = "Namespace must not be empty."
-  }
 }
 
 variable "cluster_role_name" {
