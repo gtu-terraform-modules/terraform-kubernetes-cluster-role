@@ -16,6 +16,9 @@ resource "kubernetes_cluster_role" "this" {
       api_groups = rule.value.api_groups
       resources  = rule.value.resources
       verbs      = rule.value.verbs
+
+      # Handle non_resource_urls as a regular block if it exists
+      non_resource_urls = rule.value.non_resource_urls != null ? rule.value.non_resource_urls : []
     }
   }
 }
