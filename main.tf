@@ -38,7 +38,7 @@ resource "kubernetes_cluster_role_binding" "this" {
   }
 }
 
-resource "kubernetes_secret_v1" "bearer_token" {
+resource "kubernetes_secret_v1" "this" {
   metadata {
     name      = "${kubernetes_service_account.this.metadata[0].name}-token"
     namespace = var.namespace
