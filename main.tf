@@ -10,24 +10,34 @@ resource "kubernetes_cluster_role" "this" {
     name = var.cluster_role_name
   }
 
-  # Rules for resources
   dynamic "rule" {
-    for_each = [for r in var.cluster_role_permissions : r if length(r.resources) > 0]
+    for_each = var.cluster_role_permissions
     content {
-      api_groups = rule.value.api_groups
-      resources  = rule.value.resources
-      verbs      = rule.value.verbs
-    }
-  }
-
-  # Rules for nonResourceURLs
-  dynamic "rule" {
-    for_each = [for r in var.cluster_role_permissions : r if length(r.non_resource_urls) > 0]
-    content {
+      api_groups        = rule.value.api_groups
+      resources         = rule.value.resources
       non_resource_urls = rule.value.non_resource_urls
       verbs             = rule.value.verbs
     }
   }
+
+  # Rules for resources
+  # dynamic "rule" {
+  #   for_each = [for r in var.cluster_role_permissions : r if length(r.resources) > 0]
+  #   content {
+  #     api_groups = rule.value.api_groups
+  #     resources  = rule.value.resources
+  #     verbs      = rule.value.verbs
+  #   }
+  # }
+
+  # Rules for nonResourceURLs
+  # dynamic "rule" {
+  #   for_each = [for r in var.cluster_role_permissions : r if length(r.non_resource_urls) > 0]
+  #   content {
+  #     non_resource_urls = rule.value.non_resource_urls
+  #     verbs             = rule.value.verbs
+  #   }
+  # }
 }
 
 resource "kubernetes_cluster_role_binding" "this" {
