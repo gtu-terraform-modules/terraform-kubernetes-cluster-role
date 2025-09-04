@@ -22,7 +22,7 @@ variable "cluster_role_binding_name" {
 variable "cluster_role_permissions" {
   description = "Permissions for the cluster role"
   type = list(object({
-    api_groups        = optional(list(string))
+    api_groups        = optional(list(string), [])
     resources         = optional(list(string))
     non_resource_urls = optional(list(string))
     verbs             = list(string)

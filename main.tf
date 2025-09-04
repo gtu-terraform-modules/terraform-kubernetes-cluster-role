@@ -13,12 +13,10 @@ resource "kubernetes_cluster_role" "this" {
   dynamic "rule" {
     for_each = var.cluster_role_permissions
     content {
-      api_groups = rule.value.api_groups != null ? rule.value.api_groups : []
-      resources  = rule.value.resources != null ? rule.value.resources : []
-      verbs      = rule.value.verbs
-
-      # Handle non_resource_urls as a regular block if it exists
-      non_resource_urls = rule.value.non_resource_urls != null ? rule.value.non_resource_urls : []
+      api_groups        = rule.value.api_groups
+      verbs             = rule.value.verbs
+      resources         = rule.value.resources != null ? rule.value.resources : null
+      non_resource_urls = rule.value.non_resource_urls != null ? rule.value.non_resource_urls : null
     }
   }
 }
