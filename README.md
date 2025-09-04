@@ -12,16 +12,20 @@ To use this module, include it in your Terraform configuration as follows:
 
 ```hcl
 module "kubernetes_cluster_role" {
-  source                   = "./terraform-kubernetes-cluster-role"
-  service_account_name     = "example-service-account"
-  cluster_role_name        = "example-cluster-role"
+  source                    = "./terraform-kubernetes-cluster-role"
+  service_account_name      = "example-service-account"
+  service_account_namespace = "default"
+  cluster_role_name         = "example-cluster-role"
   cluster_role_binding_name = "example-cluster-role-binding"
-  namespace                = "default"
-  cluster_role_permissions = [
+  cluster_role_permissions  = [
     {
       api_groups = [""]
       resources  = ["pods"]
       verbs      = ["get", "list", "watch"]
+    },
+    {
+      non_resource_urls = ["/heatlhz"]
+      verbs             = ["get"]
     }
   ]
 }
@@ -34,7 +38,7 @@ module "kubernetes_cluster_role" {
 | service_account_name     | The name of the Service Account                       | `string`                                                            | n/a       |   yes    |
 | cluster_role_name        | The name of the ClusterRole                           | `string`                                                            | n/a       |   yes    |
 | cluster_role_binding_name| The name of the ClusterRoleBinding                    | `string`                                                            | n/a       |   yes    |
-| namespace                | The namespace in which to create the resources        | `string`                                                            | `"default"` |   no     |
+| service_account_namespace| The namespace in which to create the resources        | `string`                                                            | `"default"` |   no     |
 | cluster_role_permissions | A list of permissions for the ClusterRole             | `list(object({ api_groups = list(string), resources = list(string), verbs = list(string) }))` | n/a       |   yes    |
 
 ## Outputs
@@ -42,23 +46,9 @@ module "kubernetes_cluster_role" {
 | Name                     | Description                                           |
 |--------------------------|-------------------------------------------------------|
 | service_account_name     | The name of the created Service Account               |
-| cluster_role_name        | The name of the created ClusterRole                   |
-| cluster_role_binding_name| The name of the created ClusterRoleBinding            |
-| bearer_token             | The bearer token for the Service Account              |
-
-## Example
-
-Refer to the `examples/example.tf` file for a complete example of how to use this module.
+| secret_name              | The name of the created Secret                        |
 
 ## Requirements
 
-- Terraform 0.12 or later
-- Kubernetes provider
-
-## Author
-
-This module is maintained by [Your Name or Organization].
-
-## License
-
-This module is licensed under the MIT License. See the LICENSE file for more details.
+- Terraform >= 0.12
+- Kubernetes provider >= 2.0.0
