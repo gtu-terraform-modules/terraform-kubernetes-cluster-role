@@ -10,10 +10,13 @@ resource "kubernetes_cluster_role" "this" {
     name = var.cluster_role_name
   }
 
-  rule {
-    api_groups = var.cluster_role_permissions.api_groups
-    resources  = var.cluster_role_permissions.resources
-    verbs      = var.cluster_role_permissions.verbs
+  dynamic "rule" {
+    for_each = var.cluster_role_permissions
+    content {
+      api_groups = rule.value.api_groups
+      resources  = rule.value.resources
+      verbs      = rule.value.verbs
+    }
   }
 }
 
