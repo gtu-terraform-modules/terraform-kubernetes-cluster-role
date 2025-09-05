@@ -23,15 +23,15 @@ variable "cluster_role_permissions" {
   description = "Permissions for the cluster role"
   type = list(object({
     api_groups        = optional(list(string)) # Example: ["apps"]
-    resources         = optional(list(string), []) # Example: ["pods"]
-    non_resource_urls = optional(list(string), []) # Example: ["/healthz"]
+    resources         = optional(list(string)) # Example: ["pods"]
+    non_resource_urls = optional(list(string)) # Example: ["/healthz"]
     verbs             = list(string) # Example: ["get", "list"]
   }))
 
   validation {
     condition     = alltrue([
       for r in var.cluster_role_permissions :
-      !(length(r.resources) > 0 && length(r.non_resource_urls) > 0)
+      !(r.resources != null && r.non_resource_urls != null)
     ])
     error_message = "Each rule in cluster_role_permissions must not have both resources and non_resource_urls defined at the same time."
   }
